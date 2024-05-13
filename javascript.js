@@ -38,7 +38,7 @@ function inputValidation() {
     while (inValid) {
         input = prompt("Your choice: ");
         input = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
-        
+
         if (input != null && VALID_INPUT.includes(input)) {
             inValid = false;
         }
@@ -50,12 +50,12 @@ function game() {
     let score = 0;
     let human = "";
     let computer = "";
-    
-    for (i = 0; i < 5; i++){
+
+    for (i = 0; i < 5; i++) {
         human = inputValidation();
         computer = getComputerChoice();
         score += rule(human, computer);
-        
+
         console.log("Human: " + human + ". Computer: " + computer + "\n");
         console.log("Score = " + score);
     }
