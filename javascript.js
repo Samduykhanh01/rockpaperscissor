@@ -1,3 +1,6 @@
+let startButton = document.querySelector('#start');
+startButton.addEventListener("click", playGame);
+
 function getComputerChoice() {
     const STATE = ["Rock", "Paper", "Scissor"];
     num = Math.floor(Math.random() * 3);
@@ -5,24 +8,64 @@ function getComputerChoice() {
     return STATE[num];
 }
 
-function rule(computer, human) {
+function getHumanChoice() {
+    // let humanChoice = prompt("What do you choose?")
+    // console.log(humanChoice)
+    // let playerButtons = document.querySelector('#playerButtons');
+    let humanChoice = "";
+    let validation = [false, ""]
+    do {
+        let playerButtons = document.querySelector("#playerButtons")
+        playerButtons.addEventListener("click", (event) => {
+            validation = inputValidation(event.target.id);
+            humanChoice = validation[1];
+            console.log("Human chose " + humanChoice);
+            console.log(validation[0])
+        });
+    } while (!validation[0]);
+    // while (humanChoice === "") {
+    console.log("Escaped do while in getHumanChoice");
+    // }
+
+    return humanChoice
+}
+
+function inputValidation(text) {
+    let input = text;
+    const VALID_INPUT = ["Rock", "Paper", "Scissor"];
+
+    let valid = false;
+    // while (inValid) {
+    // input = prompt("Your choice: ");
+    input = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+
+    if (input != null && VALID_INPUT.includes(input)) {
+        valid = true;
+    }
+
+    return valid ? [true, input] : [false, text]
+    // }
+    // return input;
+}
+
+function rule(humanChoice, computerChoice) {
     let score = 0;
-    if (human == "Rock") {
-        if (computer == "Scissor") {
+    if (humanChoice == "rock") {
+        if (computerChoice == "scissor") {
             score++;
-        } else if (computer == "Paper") {
+        } else if (computerChoice == "paper") {
             score--;
         }
-    } else if (human == "Paper") {
-        if (computer == "Rock") {
+    } else if (humanChoice == "paper") {
+        if (computerChoice == "rock") {
             score++;
-        } else if (computer == "Scissor") {
+        } else if (computerChoice == "scissor") {
             score--;
         }
     } else {
-        if (computer == "Paper") {
+        if (computerChoice == "paper") {
             score++;
-        } else if (computer == "Rock") {
+        } else if (computerChoice == "rock") {
             score--;
         }
     }
@@ -30,44 +73,38 @@ function rule(computer, human) {
     return score;
 }
 
-function inputValidation() {
-    let input = "";
-    const VALID_INPUT = ["Rock", "Paper", "Scissor"];
+function playRound(humanChoice, computerChoice) {
+    let score = 0;
+    // let human = "";
+    // let computer = "";
 
-    let inValid = true;
-    while (inValid) {
-        input = prompt("Your choice: ");
-        input = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+    // for (i = 0; i < 5; i++) {
+    // human = humanChoice
+    // computer = computerChoice;
+    score = rule(humanChoice, computerChoice);
 
-        if (input != null && VALID_INPUT.includes(input)) {
-            inValid = false;
-        }
-    }
-    return input;
+    // console.log("Human: " + humanChoice + ". Computer: " + computerChoice + "\n");
+    // console.log("Score = " + score);
+    // }
+
+    return score
 }
 
-function game() {
-    let score = 0;
-    let human = "";
-    let computer = "";
+function playGame() {
+    let totalScore = 0;
+    let humanChoice = getHumanChoice();
+    console.log(humanChoice)
+    let computerChoice = getComputerChoice();
 
-    for (i = 0; i < 5; i++) {
-        human = inputValidation();
-        computer = getComputerChoice();
-        score += rule(human, computer);
-
-        console.log("Human: " + human + ". Computer: " + computer + "\n");
-        console.log("Score = " + score);
-    }
-
-    if (score < 0) {
+    totalScore += playRound(humanChoice, computerChoice);
+    if (totalScore < 0) {
         console.log("You lose!");
-    } else if (score > 0) {
+    } else if (totalScore > 0) {
         console.log("You win!");
     } else {
         console.log("Draw!");
     }
 }
 
-game();
+// playGame();
 
